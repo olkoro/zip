@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,5 +51,10 @@ public class Controller {
     public void getAllFiles(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
         fileService.getAllFiles(response.getOutputStream());
+    }
+
+    @PostMapping(value = "/files", consumes = "multipart/form-data")
+    public void saveFile(@RequestParam("file") MultipartFile file) throws IOException {
+        fileService.saveFile(file.getOriginalFilename(), file.getInputStream(), file.getSize(), file.getContentType());
     }
 }

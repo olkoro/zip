@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
@@ -54,5 +55,13 @@ public class FileService {
             zos.closeEntry();
         }
         zos.close();
+    }
+
+    public void saveFile(String originalFilename, InputStream inputStream, long size, String contentType) throws IOException {
+        File file = new File("C:\\Users\\developer\\Desktop\\images\\" + originalFilename);
+        OutputStream os = new FileOutputStream(file);
+        IOUtils.copy(inputStream,os);
+        inputStream.close();
+        os.close();
     }
 }
