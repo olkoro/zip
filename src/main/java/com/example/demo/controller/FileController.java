@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -28,8 +29,8 @@ public class FileController {
         return fileService.getFiles();
     }
 
-    @GetMapping("/file")
-    public ResponseEntity<InputStreamResource> getFile(@RequestParam(value = "file") String file) throws FileNotFoundException {
+    @GetMapping("/{file}")
+    public ResponseEntity<InputStreamResource> getFile(@PathVariable String file) throws FileNotFoundException {
         InputStream is = fileService.getFile(file);
         HttpHeaders headers = new HttpHeaders();
         return ResponseEntity.ok()

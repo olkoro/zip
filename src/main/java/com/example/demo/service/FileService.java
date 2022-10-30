@@ -13,13 +13,10 @@ import java.util.zip.ZipOutputStream;
 @Service
 public class FileService {
 
-    final File folder = new File("C:\\Users\\developer\\Desktop\\images");
+    public static final String FOLDER_PATH = "C:\\Users\\developer\\Desktop\\images\\";
 
     public List<String> getFiles() {
-        return listFilesForFolder(folder);
-    }
-
-    public List<String> listFilesForFolder(final File folder) {
+        final File folder = new File(FOLDER_PATH);
         List<String> files = new ArrayList<>();
         for (final File fileEntry : folder.listFiles()) {
             if (!fileEntry.isDirectory()) {
@@ -30,7 +27,7 @@ public class FileService {
     }
 
     public InputStream getFile(String file) throws FileNotFoundException {
-        String pathname = folder.getPath() + '\\' + file;
+        String pathname = FOLDER_PATH + file;
         File initialFile = new File(pathname);
         return new FileInputStream(initialFile);
     }
@@ -38,7 +35,7 @@ public class FileService {
     public void getAllFiles(ServletOutputStream outputStream) throws IOException {
         ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outputStream));
 
-        List<String> files = listFilesForFolder(folder);
+        List<String> files = getFiles();
         for (String file : files) {
             InputStream inputStream = getFile(file);
 
@@ -58,7 +55,7 @@ public class FileService {
     }
 
     public void saveFile(String originalFilename, InputStream inputStream, long size, String contentType) throws IOException {
-        File file = new File("C:\\Users\\developer\\Desktop\\images\\" + originalFilename);
+        File file = new File(FOLDER_PATH + originalFilename);
         OutputStream os = new FileOutputStream(file);
         IOUtils.copy(inputStream,os);
         inputStream.close();
