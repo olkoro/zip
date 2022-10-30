@@ -1,38 +1,29 @@
-package com.example.demo;
+package com.example.demo.controller;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import com.example.demo.service.FileService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/api")
-public class Controller {
+@RequestMapping("/api/files")
+public class FileController {
 
     private final FileService fileService;
 
-    public Controller(FileService fileService) {
+    public FileController(FileService fileService) {
         this.fileService = fileService;
     }
 
-    @GetMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return String.format("Hello %s!", name);
-    }
-
-    @GetMapping("/files")
+    @GetMapping()
     public List<String> getFiles() {
         return fileService.getFiles();
     }
@@ -47,13 +38,13 @@ public class Controller {
                 .body(new InputStreamResource(is));
     }
 
-    @GetMapping("/files/download")
+    @GetMapping("/download")
     public void getAllFiles(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
         fileService.getAllFiles(response.getOutputStream());
     }
 
-    @PostMapping(value = "/files", consumes = "multipart/form-data")
+    @PostMapping(consumes = "multipart/form-data")
     public void saveFile(@RequestParam("file") MultipartFile file) throws IOException {
         fileService.saveFile(file.getOriginalFilename(), file.getInputStream(), file.getSize(), file.getContentType());
     }
