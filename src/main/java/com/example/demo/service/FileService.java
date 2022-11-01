@@ -54,7 +54,7 @@ public class FileService {
         zos.close();
     }
 
-    public void saveFile(String originalFilename, InputStream inputStream, long size, String contentType) throws IOException {
+    public void saveFile(String originalFilename, InputStream inputStream) throws IOException {
         File file = new File(FOLDER_PATH + originalFilename);
         OutputStream os = new FileOutputStream(file);
         IOUtils.copy(inputStream,os);

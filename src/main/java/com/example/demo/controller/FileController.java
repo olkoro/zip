@@ -47,6 +47,6 @@ public class FileController {
 
     @PostMapping(consumes = "multipart/form-data")
     public void saveFile(@RequestParam("file") MultipartFile file) throws IOException {
-        fileService.saveFile(file.getOriginalFilename(), file.getInputStream(), file.getSize(), file.getContentType());
+        fileService.saveFile(file.getOriginalFilename(), file.getInputStream());
     }
 }
